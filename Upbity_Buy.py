@@ -40,12 +40,15 @@ while True:
             #
             krw = 1000
             orderbook = pyupbit.get_orderbook(tick)
-            sell_price = orderbook[0]['orderbook_units'][3]['ask_price']
-            unit = format((krw / sell_price),'.2f') #sell price dynamic하게 구현필요. 왜 오류나는지 모름
-            print(upbit.buy_limit_order(tick,sell_price,unit))
+            seller_price = orderbook[0]['orderbook_units'][3]['ask_price']
+            unit = format((krw / seller_price),'.2f') #sell price dynamic하게 구현필요. 왜 오류나는지 모름
+            print(upbit.buy_limit_order(tick,seller_price,unit))
             time.sleep(0.5)
-            print(upbit.sell_limit_order(tick, (sell_price*1.3)+0.1,unit))
+            sell_price = seller_price*1.3+0.1
+            print(upbit.sell_limit_order(tick, sell_price,unit))
         time.sleep(0.1)
+        #아예 지정가 매수주문으로 변경시키고, 매도를 루프로 구혀내서 매수가격 * 1.3으로 구ㅕㅎㄴ
+        #그 후 특정 시간 e.g. 11:48에 전량 매도
 
 
 

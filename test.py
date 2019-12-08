@@ -15,7 +15,3 @@ tickers = pyupbit.get_tickers(fiat="KRW")
 # print(buy_target)
 #
 # # set(tickers)-
-
-df = pyupbit.get_ohlcv("KRW-XRP")
-yesterday = df.iloc[-2]
-print(df)
