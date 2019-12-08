@@ -4,8 +4,8 @@ import pandas as pd
 import datetime
 
 
-con_key = ""
-sec_key = ""
+con_key = "09b0eedd188a0b6a01f56627bb353773"
+sec_key = "09b0eedd188a0b6a01f56627bb353773"
 bithumb = pybithumb.Bithumb(con_key, sec_key)
 
 
@@ -28,15 +28,13 @@ def buy_crypto(ticker):
 
 
 
-
+now = datetime.datetime.now()
+mid = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(1)
 
 while True:
     now = datetime.datetime.now()
-    mid = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(1)
-    if now ==mid:
-        print("정각입니다")
-        now = datetime.datetime.now()
-        mid = datetime.datetime(now.year, now.month, now.day)+ datetime.timedelta(1)
+    if mid < now < mid + datetime.delta(seconds=10):
+        mid = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(1)
 
     tickers = pybithumb.get_tickers()
     print(datetime.datetime.now())
@@ -48,9 +46,7 @@ while True:
         krw = bithumb.get_balance(ticker)[2]
         orderbook = pybithumb.get_orderbook(ticker+"/KRW")
         sell_price = orderbook['asks'][0]['price']
-        unit = krw / float(sell_price * 1.02)
-        bithumb.buy_market_order(ticker, unit)
-        print(ticker+"bought")
-    time.sleep(1)
-
+        unit = 1000 / float(sell_price * 1.02)
+        print(bithumb.buy_market_order(ticker, unit))
+    time.sleep(0.2)
 
