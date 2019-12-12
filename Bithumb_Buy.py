@@ -4,8 +4,8 @@ import pandas as pd
 import datetime
 
 
-con_key = "09b0eedd188a0b6a01f56627bb353773"
-sec_key = "b1c0d41f1e596ede79ad4eec48050ae3"
+con_key = ""
+sec_key = ""
 bithumb = pybithumb.Bithumb(con_key, sec_key)
 
 
