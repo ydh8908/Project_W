@@ -51,7 +51,7 @@ while True:
         morn_end = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=12)
         even_beg = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=18)
         even_end = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=19)
-
+        #11시 ~ 11시 01 분까지만 매도 하도록 설계
         if not (morn_beg <= now <= morn_end or even_beg <= now <= even_end):
             hold_balance = upbit.get_balances()[0]
             for i in hold_balance[1:]:

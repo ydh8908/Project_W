@@ -19,11 +19,6 @@ tickers = pyupbit.get_tickers(fiat="KRW")
 # # set(tickers)-
 now = datetime.datetime.now()
 morn_beg = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=11)
-morn_end = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=12)
-even_beg = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=18)
-even_end = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=19)
-if not morn_beg<= now <= morn_end or even_beg<= now <= even_end :
-    print(True)
-else:
-    print(False)
+morn_end = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=11.002)
 
+print(morn_end)
