@@ -41,37 +41,44 @@ while True:
             #
             krw = 1000
             orderbook = pyupbit.get_orderbook(tick)
-            price = orderbook[0]['orderbook_units'][0]['bid_price']
+            price = orderbook[0]['orderbook_units'][0]['ask_price'] #현재 bid price로 구현 시, 동일 주문이 반복으로 들어감
             unit = format((krw / price),'.2f')
             print(tick)
             print(upbit.buy_limit_order(tick,price,unit))
 
-        hold_balance = upbit.get_balances()[0]
-        for i in hold_balance[1:]:
-            sell_price = float(i['avg_buy_price']) * 1.28
-            if sell_price < 10:
-                adj_sell_price = format(sell_price, '.2f')
-            elif 10 <= sell_price < 100:
-                adj_sell_price = format(sell_price, '.1f')
-            elif 100 <= sell_price < 1000:
-                adj_sell_price = round(sell_price)
-            elif 1000 <= sell_price < 10000:
-                adj_sell_price = sell_price - (sell_price % 5)
-            elif 10000 <= sell_price < 100000:
-                adj_sell_price = sell_price - (sell_price % 10)
-            elif 100000 <= sell_price < 500000:
-                adj_sell_price = sell_price - (sell_price % 50)
-            elif 500000 <= sell_price < 1000000:
-                adj_sell_price = sell_price - (sell_price % 100)
-            elif 1000000 <= sell_price < 2000000:
-                adj_sell_price = sell_price - (sell_price % 500)
-            elif 2000000 <= sell_price:
-                adj_sell_price = sell_price - (sell_price % 1000)
+        now = datetime.datetime.now()
+        morn_beg = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=11)
+        morn_end = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=12)
+        even_beg = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=18)
+        even_end = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=19)
+        #11시 ~ 11시 01 분까지만 매도 하도록 설계
+        if not (morn_beg <= now <= morn_end or even_beg <= now <= even_end):
+            hold_balance = upbit.get_balances()[0]
+            for i in hold_balance[1:]:
+                sell_price = float(i['avg_buy_price']) * 1.23
+                if sell_price < 10:
+                    adj_sell_price = format(sell_price, '.2f')
+                elif 10 <= sell_price < 100:
+                    adj_sell_price = format(sell_price, '.1f')
+                elif 100 <= sell_price < 1000:
+                    adj_sell_price = round(sell_price)
+                elif 1000 <= sell_price < 10000:
+                    adj_sell_price = sell_price - (sell_price % 5)
+                elif 10000 <= sell_price < 100000:
+                    adj_sell_price = sell_price - (sell_price % 10)
+                elif 100000 <= sell_price < 500000:
+                    adj_sell_price = sell_price - (sell_price % 50)
+                elif 500000 <= sell_price < 1000000:
+                    adj_sell_price = sell_price - (sell_price % 100)
+                elif 1000000 <= sell_price < 2000000:
+                    adj_sell_price = sell_price - (sell_price % 500)
+                elif 2000000 <= sell_price:
+                    adj_sell_price = sell_price - (sell_price % 1000)
 
-            if float(i['balance']) < 0.01:
-                continue
-            else:
-                print(upbit.sell_limit_order("KRW-" + i['currency'], adj_sell_price, float(i['balance'])))
+                if float(i['balance']) < 0.01:
+                    continue
+                else:
+                    print(upbit.sell_limit_order("KRW-" + i['currency'], adj_sell_price, float(i['balance'])))
 
         #그 특정 시간 e.g. 11:48에 보유주문 전량 취소 후전량 매도
 
